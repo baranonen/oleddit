@@ -91,11 +91,14 @@ def render():
     if currentpage > 9:
         draw.text((width - 29, 0),    str(currentpage) + "/" + str(postquantity),  font=font, fill=255)
     else:
-        draw.text((width - 23, 0),    str(currentpage) + "/" + str(postquantity),  font=font, fill=255)
-
+        if postquantity > 9:
+            draw.text((width - 23, 0),    str(currentpage) + "/" + str(postquantity),  font=font, fill=255)
+        else:
+            draw.text((width - 17, 0),    str(currentpage) + "/" + str(postquantity),  font=font, fill=255)
+            
     draw.rectangle((-1,11,width,height), outline=255, fill=0)
     
-    draw.text((0, 14),    "u/" + currentpostauthor,  font=font, fill=255)
+    draw.text((0, 14),    "u/" + currentpostauthor[0:19],  font=font, fill=255)
     
     draw.text((0, 25, width , height),    (currentpost[0:21]),  font=font, fill=255)
     draw.text((0, 35, width , height),    (currentpost[21:42]),  font=font, fill=255)
