@@ -30,7 +30,7 @@ DC = 23
 SPI_PORT = 0
 SPI_DEVICE = 0
 
-# Initiate  the display and show a loading message
+# Initializing the display and showing a loading message
 
 disp = Adafruit_SSD1306.SSD1306_128_64(rst=RST)
 
@@ -40,12 +40,8 @@ image = Image.new('1', (width, height))
 
 draw = ImageDraw.Draw(image)
 
-# Load default font.
-font = ImageFont.truetype('Coders Crux.ttf', 15)
 
-# Alternatively load a TTF font.  Make sure the .ttf font file is in the same directory as the python script!
-# Some other nice fonts to try: http://www.dafont.com/bitmap.php
-#font = ImageFont.truetype('Minecraftia.ttf', 8)
+font = ImageFont.truetype("Coders' Crux.ttf", 15)
 
 disp.begin()
 disp.clear()
@@ -56,8 +52,6 @@ draw.text((0, 30),    "data",  font=font, fill=255)
 draw.text((0, 45),    "This may take a while",  font=font, fill=255)
 disp.image(image)
 disp.display()
-
-time.sleep(3)
 
 # Fetching data
 
@@ -76,12 +70,15 @@ draw.text((0, 20),    "Press the button to",  font=font, fill=255)
 draw.text((0, 30),    "navigate between",  font=font, fill=255)
 draw.text((0, 40),    "posts",  font=font, fill=255)
 
+disp.image(image)
+disp.display()
+
+time.sleep(3)
+
 def render():
 
     disp.image(image)
     disp.display()
-
-    time.sleep(3)
 
     disp.clear()
 
@@ -111,7 +108,7 @@ def render():
 
 render()
 
-while True: # Run forever
+while True:
     if GPIO.input(15) == GPIO.HIGH:
         if currentpage == postquantity:
             time.sleep(0.2)
