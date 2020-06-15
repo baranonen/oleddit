@@ -73,7 +73,7 @@ draw.text((0, 40),    "posts",  font=font, fill=255)
 disp.image(image)
 disp.display()
 
-time.sleep(3)
+time.sleep(2)
 
 def render():
 
@@ -83,10 +83,27 @@ def render():
     disp.clear()
 
     draw.rectangle((0,0,width,height), outline=0, fill=0)
+    
+    # Displaying subreddit name without any overflow
+    
+    if postquantity > 9:
+        if currentpage > 9:
+            if len(subreddit) > 14:
+                draw.text((0, 0),    "r/" + (subreddit[0:13]) + ".",  font=font, fill=255)
+            else:
+                draw.text((0, 0),    "r/" + (subreddit[0:14]),  font=font, fill=255)
+        else:
+            if len(subreddit) > 15:
+                draw.text((0, 0),    "r/" + (subreddit[0:14]) + ".",  font=font, fill=255)
+            else:
+                draw.text((0, 0),    "r/" + (subreddit[0:15]),  font=font, fill=255)
+    else:
+        if len(subreddit) > 16:
+            draw.text((0, 0),    "r/" + (subreddit[0:15]) + ".",  font=font, fill=255)
+        else:
+            draw.text((0, 0),    "r/" + (subreddit[0:15]),  font=font, fill=255)
 
-    draw.text((0, 0),    "r/" + subreddit,  font=font, fill=255)
-
-    #draw.text((width - 41, 0),    "Oleddit",  font=font, fill=255)
+    # Displaying current page
     
     if currentpage > 9:
         draw.text((width - 29, 0),    str(currentpage) + "/" + str(postquantity),  font=font, fill=255)
@@ -97,6 +114,8 @@ def render():
             draw.text((width - 17, 0),    str(currentpage) + "/" + str(postquantity),  font=font, fill=255)
             
     draw.rectangle((-1,11,width,height), outline=255, fill=0)
+    
+    # Displaying post author
     
     draw.text((0, 14),    "u/" + currentpostauthor[0:19],  font=font, fill=255)
     
@@ -124,4 +143,4 @@ while True:
             currentpage = currentpage + 1
             currentpost = str(obj['data']['children'][currentpage - 1]['data']['title'])
             currentpostauthor = str(obj['data']['children'][currentpage - 1]['data']['author'])
-            render()
+            render() 
