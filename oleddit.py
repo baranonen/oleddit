@@ -2,6 +2,7 @@
 
 import time
 import RPi.GPIO as GPIO
+import sys
 
 import Adafruit_GPIO.SPI as SPI
 import Adafruit_SSD1306
@@ -55,14 +56,38 @@ disp.display()
 
 # Fetching data
 
-subjson = urllib.request.urlopen('https://www.reddit.com/r/' + subreddit + '/top/.json?count=5').read()
+try:
+    subjson = urllib.request.urlopen('https://www.reddit.com/r/' + subreddit + '/top/.json?count=5').read()
+except urllib.error.HTTPError:
+    disp.clear()
+    draw.rectangle((0,0,width,height), outline=0, fill=0)
+    draw.text((25, 0),    "OLEDDIT",  font = ImageFont.truetype('VCR_OSD_MONO_1.001.ttf', 20), fill=255)
+    draw.text((0, 20),    "HTTP Error 429",  font=font, fill=255)
+    draw.text((0, 30),    "Too many requests",  font=font, fill=255)
+    draw.text((0, 45),    "Please try again",  font=font, fill=255)
+    disp.image(image)
+    disp.display()
+    sys.exit("HTTP Error 429")
+    
 obj = json.loads(subjson)
 
-currentpost = str(obj['data']['children'][currentpage - 1]['data']['title'])
-currentpostauthor = str(obj['data']['children'][currentpage - 1]['data']['author'])
-postquantity = int(obj['data']['dist'])
+try:
+    currentpost = str(obj['data']['children'][currentpage - 1]['data']['title'])
+    currentpostauthor = str(obj['data']['children'][currentpage - 1]['data']['author'])
+    postquantity = int(obj['data']['dist'])
+    
+except IndexError:
+    disp.clear()
+    draw.rectangle((0,0,width,height), outline=0, fill=0)
+    draw.text((25, 0),    "OLEDDIT",  font = ImageFont.truetype('VCR_OSD_MONO_1.001.ttf', 20), fill=255)
+    draw.text((0, 20),    "IndexError",  font=font, fill=255)
+    draw.text((0, 35),    "Couldn't read the",  font=font, fill=255)
+    draw.text((0, 45),    "data. Please try",  font=font, fill=255)
+    draw.text((0, 55),    "another subreddit",  font=font, fill=255)
+    disp.image(image)
+    disp.display()
+    sys.exit("IndexError")
 
-disp.clear()
 
 draw.rectangle((0,0,width,height), outline=0, fill=0)
 draw.text((25, 0),    "OLEDDIT",  font = ImageFont.truetype('VCR_OSD_MONO_1.001.ttf', 20), fill=255)
